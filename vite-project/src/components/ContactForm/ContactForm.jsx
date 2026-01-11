@@ -1,64 +1,58 @@
-import { Component } from "react";
+import { useState } from "react";
 
-export class ContactForm extends Component {
-  state = {
-    name: "",
-    number: "",
+// ДОДАНО { onSubmit } у дужки нижче
+export default function ContactForm({ onSubmit }) {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+
+  const handleChange = (event) => {
+    setName(event.target.value);
   };
 
-  handleChange = (event) => {
-    this.setState({ name: event.target.value });
+  const handleChangeNumber = (event) => {
+    setNumber(event.target.value);
   };
 
-  handleChangeNumber = (event) => {
-    this.setState({ number: event.target.value });
-  };
-
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
-    this.props.onSubmit({
-      name: this.state.name,
-      number: this.state.number,
+    // Тепер onSubmit буде працювати, бо ми отримали його з пропсів
+    onSubmit({
+      name: name,
+      number: number,
     });
 
-    this.setState({
-      name: "",
-      number: "",
-    });
+    setName("");
+    setNumber("");
   };
 
-  render() {
-    return (
-      <form className="form" onSubmit={this.handleSubmit}>
-        <label>
-          Name
-          <input
-            className="name--input"
-            type="text"
-            name="name"
-            value={this.state.name}
-            onChange={this.handleChange}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            required
-          />
-        </label>
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      <label>
+        Name
+        <input
+          className="name--input"
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleChange}
+          required
+        />
+      </label>
 
-        <label>
-          Phone Number
-          <input
-            type="tel"
-            name="number"
-            value={this.state.number}
-            onChange={this.handleChangeNumber}
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
-          />
-        </label>
+      <label>
+        Phone Number
+        <input
+          type="tel"
+          name="number"
+          value={number}
+          onChange={handleChangeNumber}
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+        />
+      </label>
 
-        <button type="submit">Add Contact</button>
-      </form>
-    );
-  }
+      <button type="submit">Add Contact</button>
+    </form>
+  );
 }
