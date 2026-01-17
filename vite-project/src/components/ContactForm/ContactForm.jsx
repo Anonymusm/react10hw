@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Context } from "../ContactContext";
 
-// ДОДАНО { onSubmit } у дужки нижче
-export default function ContactForm({ onSubmit }) {
+export default function ContactForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+
+  const { handleContactSubmit } = useContext(Context);
 
   const handleChange = (event) => {
     setName(event.target.value);
@@ -17,7 +19,7 @@ export default function ContactForm({ onSubmit }) {
     event.preventDefault();
 
     // Тепер onSubmit буде працювати, бо ми отримали його з пропсів
-    onSubmit({
+    handleContactSubmit({
       name: name,
       number: number,
     });
