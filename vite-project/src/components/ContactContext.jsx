@@ -1,10 +1,27 @@
-import { useState, useEffect, useRef, createContext } from "react";
+import { useState, useEffect, useRef, createContext, useReducer } from "react";
 import { nanoid } from "nanoid";
 
 export const Context = createContext();
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "ADD":
+      return [...state, action.new];
+
+    case "DELETE":
+      return state.filter(contact => contact.id !== action.id);
+
+    case "PARSE":
+      return action.parsed;
+
+    default:
+      return state;
+  }
+}
+
+
 export default function ContactContext({ children }) {
-  const [contacts, setContacts] = useState([]);
+  const [contacts, dispatch] = useReducer(reducer, []);
   const [filter, setFilter] = useState("");
   const refDeleted = useRef(0);
 
@@ -25,16 +42,16 @@ export default function ContactContext({ children }) {
       number,
     };
 
-    setContacts((prev) => [...prev, newContact]);
+    dispatch({ type: "ADD", new: newContact });
+
+    // setContacts((prev) => [...prev, newContact]);
   };
 
-  function handleDelete (deleteById) {
-    setContacts((prev) => {
-      return prev.filter((contact) => contact.id !== deleteById);
-    });
+  function handleDelete(deleteById) {
+    dispatch({ type: "DELETE", id: deleteById });
     refDeleted.current = deleteById;
     console.log(`Deleted id: ${refDeleted.current}`);
-  };
+  }
 
   const filterChange = (event) => {
     setFilter(event.target.value);
@@ -53,7 +70,7 @@ export default function ContactContext({ children }) {
     const parsedContacts = JSON.parse(contacts);
 
     if (parsedContacts) {
-      setContacts(parsedContacts);
+      dispatch({ type: "PARSE", parsed: parsedContacts });
     }
   }, []);
 
@@ -68,7 +85,7 @@ export default function ContactContext({ children }) {
         searchedContact,
         filterChange,
         contacts,
-        filter
+        filter,
       }}
     >
       {children}
