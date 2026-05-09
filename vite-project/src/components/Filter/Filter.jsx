@@ -1,13 +1,14 @@
-import { useContext } from "react";
-import { Context } from "../ContactContext";
+import { useDispatch, useSelector } from "react-redux";
+import { filterChange } from "../redux/slices/filterSlice";
 
 export function Filter() {
-  const { filterChange, filter } = useContext(Context);
+  const filter = useSelector(state => state.contactsData.filter);
+  const dispatch = useDispatch()
 
   return (
     <label>
       Search:
-      <input type="text" onChange={filterChange} value={filter} />
+      <input type="text" onChange={(e) => dispatch(filterChange(e))} value={filter} />
     </label>
   );
 }

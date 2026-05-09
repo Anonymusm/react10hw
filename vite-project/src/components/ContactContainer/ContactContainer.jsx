@@ -1,16 +1,23 @@
 import { Filter } from "../Filter/Filter";
 import { ContactList } from "../ContactList/ContactList";
 import ContactForm from "../ContactForm/ContactForm";
-import { useContext } from "react";
-import { Context } from "../ContactContext";
+import { useSelector } from "react-redux";
 
 export default function ContactContainer() {
-  const { contacts, filter } = useContext(Context);
+  const contacts = useSelector(
+  (state) => state.contactsData.contacts
+);
+
+const filter = useSelector(
+  (state) => state.contactsData.filter
+);
+
   const normalizedFilter = filter.toLowerCase();
 
   const filtered = contacts.filter(({ name }) =>
     name.toLowerCase().includes(normalizedFilter),
   );
+  
   return (
     <>
       <h2>Phonebook</h2>

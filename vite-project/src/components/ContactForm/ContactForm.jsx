@@ -1,11 +1,12 @@
-import { useState, useContext } from "react";
-import { Context } from "../ContactContext";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { add } from "../redux/slices/filterSlice";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
+  const dispatch = useDispatch()
 
-  const { handleContactSubmit } = useContext(Context);
 
   const handleChange = (event) => {
     setName(event.target.value);
@@ -18,11 +19,12 @@ export default function ContactForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Тепер onSubmit буде працювати, бо ми отримали його з пропсів
-    handleContactSubmit({
+    dispatch(add({
       name: name,
-      number: number,
-    });
+      number: number
+    }))
+
+
 
     setName("");
     setNumber("");
