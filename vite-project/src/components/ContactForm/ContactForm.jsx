@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { add } from "../redux/slices/filterSlice";
+import { addContact } from "../redux/operations";
 
 export default function ContactForm() {
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ export default function ContactForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    dispatch(add({
+    dispatch(addContact({
       name: name,
       number: number
     }))

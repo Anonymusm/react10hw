@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { deleteById } from "../redux/slices/filterSlice";
+import { deleteContact, getContacts } from "../redux/operations";
+import { useEffect } from "react";
 
 export function ContactList() {
   const dispatch = useDispatch();
@@ -13,6 +14,10 @@ export function ContactList() {
     name.toLowerCase().includes(normalizedFilter)
   );
 
+  useEffect(() => {
+    dispatch(getContacts())
+  }, [dispatch])
+
   return (
     <ul className="list">
       {filteredContacts.map(({ id, name, number }) => (
@@ -21,7 +26,7 @@ export function ContactList() {
             {name}: {number}
           </h3>
 
-          <button type="button" onClick={() => dispatch(deleteById(id))}>
+          <button type="button" onClick={() => dispatch(deleteContact(id))}>
             Delete
           </button>
         </li>
