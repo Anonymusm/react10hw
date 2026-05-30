@@ -2,21 +2,14 @@ import { Filter } from "../Filter/Filter";
 import { ContactList } from "../ContactList/ContactList";
 import ContactForm from "../ContactForm/ContactForm";
 import { useSelector } from "react-redux";
+import { selectFiltered } from "../redux/selectors";
 
 export default function ContactContainer() {
   const contacts = useSelector(
   (state) => state.contactsData.contacts
 );
 
-const filter = useSelector(
-  (state) => state.contactsData.filter
-);
-
-  const normalizedFilter = filter.toLowerCase();
-
-  const filtered = contacts.filter(({ name }) =>
-    name.toLowerCase().includes(normalizedFilter),
-  );
+const filtered = useSelector(selectFiltered);
   
   return (
     <>
